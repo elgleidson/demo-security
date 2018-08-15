@@ -4,7 +4,7 @@ server:
 logging: 
   level:
     root: INFO
-    com.example.demo: DEBUG
+    com.github.elgleidson.demo.security: DEBUG
 
 spring:
   application:
@@ -27,6 +27,17 @@ spring:
   liquibase:
     change-log: classpath:/db/changelog/db.changelog-master.xml
 
+management:
+  endpoint:
+    beans:
+      enabled: true
+  endpoints:
+    enabled-by-default: true
+    web:
+      base-path: /management
+      exposure:
+        include: "*"
+
 app:
   security:
     authentication:
@@ -34,5 +45,3 @@ app:
         # https://www.base64encode.org/
         secret-key: ZGVtbw== 
         expiration-in-seconds: 86400 
-
-  
