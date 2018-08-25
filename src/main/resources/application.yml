@@ -45,3 +45,4 @@ app:
         # https://www.base64encode.org/
         secret-key: ZGVtbw== 
         expiration-in-seconds: 86400 
+

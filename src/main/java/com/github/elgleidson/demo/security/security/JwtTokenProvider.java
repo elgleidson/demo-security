@@ -38,14 +38,14 @@ public class JwtTokenProvider {
 		Date now = new Date();
 		Date validity = new Date(now.getTime() + (jwtExpirationInSeconds * 1000));
 		
-		User usuario = (User) authentication.getPrincipal();
+		User user = (User) authentication.getPrincipal();
 		String perfis = authentication.getAuthorities().stream().map(auth -> auth.getAuthority()).collect(Collectors.joining(","));
 		
 		return Jwts.builder()
-			.setSubject(Long.toString(usuario.getId()))
-			.claim("id", usuario.getId())
-			.claim("username", usuario.getUsername())
-			.claim("email", usuario.getEmail())
+			.setSubject(Long.toString(user.getId()))
+			.claim("id", user.getId())
+			.claim("username", user.getUsername())
+			.claim("email", user.getEmail())
 			.claim("roles", perfis)
 			.setIssuedAt(now)
 			.setExpiration(validity)
@@ -55,12 +55,12 @@ public class JwtTokenProvider {
 	
 	public Authentication getAuthentication(String authToken) {
 		Claims claims = Jwts.parser().setSigningKey(jwtSecretKey).parseClaimsJws(authToken).getBody();
-		User usuario = new User();
-		usuario.setId(Long.parseLong(claims.getSubject()));
-		usuario.setUsername(claims.get("username").toString());
-		usuario.setEmail(claims.get("email").toString());
+		User user = new User();
+		user.setId(Long.parseLong(claims.getSubject()));
+		user.setUsername(claims.get("username").toString());
+		user.setEmail(claims.get("email").toString());
 		List<Role> perfis = Arrays.stream(claims.get("roles").toString().split(",")).map(Role::new).collect(Collectors.toList());
-		return new UsernamePasswordAuthenticationToken(usuario, authToken, perfis);
+		return new UsernamePasswordAuthenticationToken(user, authToken, perfis);
 	}
 	
 	public boolean validateToken(String authToken) {
